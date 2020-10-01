@@ -9,3 +9,7 @@ variable "lambda_handler" {
 variable "lambda_timeout" {
   description = "PHP daily lambda timeout"
 }
+
+variable "lambda_schedule" {
+  description = "PHP daily lambda event rule schedule"
+}
