@@ -65,7 +65,7 @@ resource "aws_lambda_function" "lambda" {
   function_name = "${var.lambda_name}"
   role = "${aws_iam_role.lambda_role.arn}"
   handler = "${var.lambda_handler}"
-  source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
+  source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}-${aws_iam_role.lambda_role.name}"
 
   timeout = "${var.lambda_timeout}"
   runtime = "python3.6"
