@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "lambda_role_template" {
     ]
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = [
         "lambda.amazonaws.com"
       ]
@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "lambda_role_template" {
 
 data "aws_iam_policy_document" "lambda_policy_template" {
   statement {
-    actions = [
+    actions   = [
       "logs:CreateLogGroup",
     ]
     resources = [
@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "lambda_policy_template" {
   }
 
   statement {
-    actions = [
+    actions   = [
       "logs:CreateLogStream",
       "logs:PutLogEvents",
     ]
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "lambda_policy_template" {
   }
 
   statement {
-    actions = [
+    actions   = [
       "ec2:DescribeNetworkInterfaces",
       "ec2:CreateNetworkInterface",
       "ec2:DeleteNetworkInterface",
@@ -48,22 +48,6 @@ data "aws_iam_policy_document" "lambda_policy_template" {
     ]
   }
 
-}
-
-data "local_file" "twitter_access_token" {
-  filename = "secrets/twitter_access_token.txt"
-}
-
-data "local_file" "twitter_access_secret" {
-  filename = "secrets/twitter_access_secret.txt"
-}
-
-data "local_file" "twitter_consumer_key" {
-  filename = "secrets/twitter_consumer_key.txt"
-}
-
-data "local_file" "twitter_consumer_secret" {
-  filename = "secrets/twitter_consumer_secret.txt"
 }
 
 data "archive_file" "lambda_zip" {
@@ -114,10 +98,10 @@ resource "aws_lambda_function" "lambda" {
 
   environment {
     variables = {
-      TWITTER_CONSUMER_KEY    = chomp(data.local_file.twitter_consumer_key.content),
-      TWITTER_CONSUMER_SECRET = chomp(data.local_file.twitter_consumer_secret.content),
-      TWITTER_ACCESS_TOKEN    = chomp(data.local_file.twitter_access_token.content),
-      TWITTER_ACCESS_SECRET   = chomp(data.local_file.twitter_access_secret.content),
+      TWITTER_CONSUMER_KEY    = var.twitter_consumer_key
+      TWITTER_CONSUMER_SECRET = var.twitter_consumer_secret
+      TWITTER_ACCESS_TOKEN    = var.twitter_access_token
+      TWITTER_ACCESS_SECRET   = var.twitter_access_secret
     }
   }
 
