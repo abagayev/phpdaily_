@@ -21,3 +21,23 @@ variable "lambda_schedule" {
   type        = string
   default     = "rate(23 hours)"
 }
+
+variable "twitter_consumer_key" {
+  description = "API key that a service provider to identify the consumer"
+  type        = string
+}
+
+variable "twitter_consumer_secret" {
+  description = "Secret that is used to request access  to a user's resources from a service provider"
+  type        = string
+}
+
+variable "twitter_access_token" {
+  description = "Token that defines the access privileges of the consumer over a particular user's resources"
+  type        = string
+}
+
+variable "twitter_access_secret" {
+  description = "Secret that is used with access token to access user's resources"
+  type        = string
+}
