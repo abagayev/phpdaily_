@@ -76,12 +76,12 @@ def describe_package():
 
 
 def post_tweet(tweet):
-    client = tweepy.Client(consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
+    api = tweepy.Client(consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
                            consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
                            access_token=os.environ['TWITTER_ACCESS_TOKEN'],
                            access_token_secret=os.environ['TWITTER_ACCESS_SECRET'])
 
-    client.create_tweet(tweet)
+    api.create_tweet(text=tweet)
 
 
 def lambda_handler(event, context):
