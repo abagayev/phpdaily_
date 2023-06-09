@@ -78,11 +78,12 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
 # Lambda layers and function
 
 resource "aws_lambda_layer_version" "packages_layer" {
-  filename   = "../src/packages.zip"
-  layer_name = format("layer-packages-%s", var.lambda_name)
+  filename         = "../src/packages.zip"
+  layer_name       = format("layer-packages-%s", var.lambda_name)
+  source_code_hash = filebase64sha256("../src/packages.zip")
 
   compatible_runtimes = [
-    "python3.9"
+    "python3.8"
   ]
 }
 
@@ -94,7 +95,7 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   timeout = var.lambda_timeout
-  runtime = "python3.6"
+  runtime = "python3.8"
 
   environment {
     variables = {
