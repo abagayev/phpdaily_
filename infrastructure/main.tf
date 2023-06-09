@@ -82,7 +82,7 @@ resource "aws_lambda_layer_version" "packages_layer" {
   layer_name = format("layer-packages-%s", var.lambda_name)
 
   compatible_runtimes = [
-    "python3.6"
+    "python3.9"
   ]
 }
 
