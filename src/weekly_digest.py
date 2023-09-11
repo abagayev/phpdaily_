@@ -1,11 +1,12 @@
 import requests
 import scrapy
 import datetime
+from rfeed import *
 
 
-def parse_tweets():
+def build_feed():
     parse_url = 'https://nitter.net/phpdaily_/search?f=tweets&since={}&until={}'.format(
-        (datetime.datetime.today() - datetime.timedelta(days=7)).strftime("%Y-%m-%d"),
+        (datetime.datetime.today() - datetime.timedelta(days=10)).strftime("%Y-%m-%d"),
         datetime.datetime.today().strftime("%Y-%m-%d"),
     )
 
@@ -25,19 +26,29 @@ def parse_tweets():
     tweets = []
 
     for li in selector.css('.timeline .timeline-item'):
-        function, description = li.css('.tweet-content ::text').get().split(':', 1)
+        parts = li.css('.tweet-content ::text').get().split(':', 1)
         href = li.css('.tweet-content a::attr(href)').get()
 
-        tweets.append({
-            function, description, href
-        })
+        # can't split or there's no href means this is not a regular post
+        if len(parts) < 2 or not href:
+            continue
 
-    return tweets
+        tweets.append(Item(
+            title="{}: {}".format(*[s.strip() for s in parts]),
+            link=href,
+        ))
+
+    return Feed(
+        title="PHP daily feed",
+        link="https://twitter.com/phpdaily_",
+        description="Daily PHP function, piece of news, library or just a tip.",
+        lastBuildDate=datetime.datetime.now(),
+        items=tweets)
 
 
 def lambda_handler(event, context):
-    tweet = parse_tweets()
-    print(tweet)
+    feed = build_feed()
+    print(feed.rss())
 
 
 if __name__ == "__main__":
